@@ -12,7 +12,75 @@ spec:
     chart: kube-prometheus-stack
     targetRevision: 79.7.0
     helm:
-      values: "grafana:\n  enabled: true\n  ingress:\n    enabled: false \n  grafana.ini:\n    server:\n      root_url: https://grafana.kroknes.dev\n      serve_from_sub_path: false\n    auth:\n      disable_login_form: false\n    auth.anonymous:\n      enabled: false\n    auth.github:\n      enabled: true\n      allow_sign_up: true\n      auto_login: false\n      scopes: user:email,read:org\n      auth_url: https://github.com/login/oauth/authorize\n      token_url: https://github.com/login/oauth/access_token\n      api_url: https://api.github.com/user\n      allowed_organizations: kroknes\n      client_id: $__env{GF_AUTH_GITHUB_CLIENT_ID}\n      client_secret: $__env{GF_AUTH_GITHUB_CLIENT_SECRET}\n  envFromSecret: grafana-github-oauth\n  envRenderSecret:\n    GF_AUTH_GITHUB_CLIENT_ID: client_id\n    GF_AUTH_GITHUB_CLIENT_SECRET: client_secret\nprometheus:\n  enabled: true\n  prometheusSpec:\n    retention: 7d # Keep metrics for 7 days\n    storageSpec:\n      volumeClaimTemplate:\n        spec:\n          accessModes: [\"ReadWriteOnce\"]\n          resources:\n            requests:\n              storage: 3Gi\n    resources:\n      requests:\n        cpu: 200m\n        memory: 512Mi\n      limits:\n        cpu: 1000m\n        memory: 2Gi\nalertmanager:\n  enabled: true\n  alertmanagerSpec:\n    storage:\n      volumeClaimTemplate:\n        spec:\n          accessModes: [\"ReadWriteOnce\"]\n          resources:\n            requests:\n              storage: 2Gi\nnodeExporter:\n  enabled: true\nkubeStateMetrics:\n  enabled: true\nkubeEtcd:\n  enabled: false\nkubeControllerManager:\n  enabled: false\nkubeScheduler:\n  enabled: false\n"
+      values: |
+        grafana:
+          enabled: true
+          ingress:
+            enabled: false
+          env:
+            GF_AUTH_GITHUB_ENABLED: "true"
+            GF_AUTH_GITHUB_ALLOW_SIGN_UP: "true"
+            GF_AUTH_GITHUB_AUTO_LOGIN: "false"
+            GF_AUTH_GITHUB_SCOPES: "user:email,read:org"
+            GF_AUTH_GITHUB_AUTH_URL: "https://github.com/login/oauth/authorize"
+            GF_AUTH_GITHUB_TOKEN_URL: "https://github.com/login/oauth/access_token"
+            GF_AUTH_GITHUB_API_URL: "https://api.github.com/user"
+            GF_AUTH_GITHUB_ALLOWED_ORGANIZATIONS: "kroknes"
+          envValueFrom:
+            GF_AUTH_GITHUB_CLIENT_ID:
+              secretKeyRef:
+                name: grafana-github-oauth
+                key: client_id
+            GF_AUTH_GITHUB_CLIENT_SECRET:
+              secretKeyRef:
+                name: grafana-github-oauth
+                key: client_secret
+          grafana.ini:
+            server:
+              root_url: https://grafana.kroknes.dev
+              serve_from_sub_path: false
+            auth:
+              disable_login_form: false
+            auth.anonymous:
+              enabled: false
+        prometheus:
+          enabled: true
+          prometheusSpec:
+            retention: 7d
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 3Gi
+            resources:
+              requests:
+                cpu: 200m
+                memory: 512Mi
+              limits:
+                cpu: 1000m
+                memory: 2Gi
+        alertmanager:
+          enabled: true
+          alertmanagerSpec:
+            storage:
+              volumeClaimTemplate:
+                spec:
+                  accessModes: ["ReadWriteOnce"]
+                  resources:
+                    requests:
+                      storage: 2Gi
+        nodeExporter:
+          enabled: true
+        kubeStateMetrics:
+          enabled: true
+        kubeEtcd:
+          enabled: false
+        kubeControllerManager:
+          enabled: false
+        kubeScheduler:
+          enabled: false
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
