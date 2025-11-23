@@ -16,7 +16,7 @@ spec:
     - backendRefs:
         - kind: Service
           namespace: monitoring
-          name: kube-prometheus-stack-grafana
+          name: monitoring-grafana
           port: 80
       matches:
         - path:

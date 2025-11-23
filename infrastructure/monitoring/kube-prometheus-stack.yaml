@@ -12,57 +12,7 @@ spec:
     chart: kube-prometheus-stack
     targetRevision: 79.7.0
     helm:
-      values: |
-        grafana:
-          enabled: true
-          ingress:
-            enabled: false # We'll use Gateway API instead
-          grafana.ini:
-            server:
-              root_url: https://grafana.kroknes.dev
-              serve_from_sub_path: false
-            auth:
-              disable_login_form: false
-            auth.anonymous:
-              enabled: false
-        prometheus:
-          enabled: true
-          prometheusSpec:
-            retention: 7d # Keep metrics for 7 days
-            storageSpec:
-              volumeClaimTemplate:
-                spec:
-                  accessModes: ["ReadWriteOnce"]
-                  resources:
-                    requests:
-                      storage: 3Gi
-            resources:
-              requests:
-                cpu: 200m
-                memory: 512Mi
-              limits:
-                cpu: 1000m
-                memory: 2Gi
-        alertmanager:
-          enabled: true
-          alertmanagerSpec:
-            storage:
-              volumeClaimTemplate:
-                spec:
-                  accessModes: ["ReadWriteOnce"]
-                  resources:
-                    requests:
-                      storage: 2Gi
-        nodeExporter:
-          enabled: true
-        kubeStateMetrics:
-          enabled: true
-        kubeEtcd:
-          enabled: false
-        kubeControllerManager:
-          enabled: false
-        kubeScheduler:
-          enabled: false
+      values: "grafana:\n  enabled: true\n  ingress:\n    enabled: false \n  grafana.ini:\n    server:\n      root_url: https://grafana.kroknes.dev\n      serve_from_sub_path: false\n    auth:\n      disable_login_form: false\n    auth.anonymous:\n      enabled: false\nprometheus:\n  enabled: true\n  prometheusSpec:\n    retention: 7d # Keep metrics for 7 days\n    storageSpec:\n      volumeClaimTemplate:\n        spec:\n          accessModes: [\"ReadWriteOnce\"]\n          resources:\n            requests:\n              storage: 3Gi\n    resources:\n      requests:\n        cpu: 200m\n        memory: 512Mi\n      limits:\n        cpu: 1000m\n        memory: 2Gi\nalertmanager:\n  enabled: true\n  alertmanagerSpec:\n    storage:\n      volumeClaimTemplate:\n        spec:\n          accessModes: [\"ReadWriteOnce\"]\n          resources:\n            requests:\n              storage: 2Gi\nnodeExporter:\n  enabled: true\nkubeStateMetrics:\n  enabled: true\nkubeEtcd:\n  enabled: false\nkubeControllerManager:\n  enabled: false\nkubeScheduler:\n  enabled: false\n"
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
