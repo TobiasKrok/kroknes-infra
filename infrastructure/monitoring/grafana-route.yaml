@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  hostnames:
+    - grafana.kroknes.dev
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: kroknes-gw
+      namespace: default
+      sectionName: web-gw-https
+  rules:
+    - backendRefs:
+        - kind: Service
+          namespace: monitoring
+          name: kube-prometheus-stack-grafana
+          port: 80
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
