@@ -14,6 +14,8 @@ spec:
     chart: cloudnative-pg
     helm:
       values: |
+        crds:
+          create: true
         replicaCount: 2
         resources:
           limits:
