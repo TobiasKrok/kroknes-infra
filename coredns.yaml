@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  argo.override: |
+    rewrite name argo.kroknes.dev cilium-gateway-kroknes-gw.kube-system.svc.cluster.local
