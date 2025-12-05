@@ -4,7 +4,7 @@ metadata:
   name: monitoring
   namespace: argocd
   finalizers:
-    - resources-finalizer.argocd.argoproj.io # Cleanup on deletion
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:

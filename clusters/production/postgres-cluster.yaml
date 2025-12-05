@@ -1,14 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: infrastructure
+  name: postgres-cluster
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
     repoURL: https://github.com/tobiaskrok/kroknes-infra
     targetRevision: HEAD
-    path: infrastructure
+    path: infrastructure/postgres
   destination:
     server: https://kubernetes.default.svc
   syncPolicy:

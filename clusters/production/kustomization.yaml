@@ -1,5 +1,7 @@
-# clusters/production/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - infrastructure.yaml
+  - monitoring.yaml
+  - networking.yaml
+  - postgres-operator.yaml
+  - postgres-cluster.yaml
