@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://emberstack.github.io/helm-charts
     chart: reflector
-    targetRevision: 1.0.6
+    targetRevision: 9.2.0-develop.18
   destination:
     server: https://kubernetes.default.svc
     namespace: reflector
