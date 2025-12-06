@@ -5,3 +5,4 @@ resources:
   - networking.yaml
   - postgres-operator.yaml
   - postgres-cluster.yaml
+  - reflector.yaml
