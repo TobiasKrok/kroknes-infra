@@ -1,0 +1,8 @@
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: longhorn
+provisioning:
+  diskSelector:
+    match: disk.transport == 'virtio' && !system_disk
+  minSize: 10Gi
+  maxSize: 80%
