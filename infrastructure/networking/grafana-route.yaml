@@ -9,9 +9,9 @@ spec:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: kroknes-gw
+      name: eg
       namespace: default
-      sectionName: web-gw-https
+      sectionName: http
   rules:
     - backendRefs:
         - kind: Service

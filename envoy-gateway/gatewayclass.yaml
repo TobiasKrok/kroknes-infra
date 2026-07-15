@@ -1,0 +1,27 @@
+# Forces the Envoy proxy's Service to ClusterIP instead of the default
+# LoadBalancer type -- there's no MetalLB/cloud LB controller in this cluster,
+# so a LoadBalancer Service would just hang in Pending forever. Cloudflare
+# Tunnel reaches this Service from inside the cluster, no public IP needed.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: cloudflare-tunnel-proxy-config
+  namespace: envoy-gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: ClusterIP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy-gateway
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: cloudflare-tunnel-proxy-config
+    namespace: envoy-gateway-system
